@@ -12,12 +12,11 @@ require_once("Controladores/alumno_controller.php");
 require_once("Controladores/contacto_controller.php");
 require_once("Modelos/alumno.php");
 require_once("Modelos/contacto.php");
-
 require_once("bootstrap.php");
 require_once("cn.php");
 
 // Verificar si el usuario ha iniciado sesión
-if(isset($_SESSION["carnet"])){
+if (isset($_SESSION["carnet"])) {
     $carnet = $_SESSION["carnet"];
     
     // Consultar datos del alumno
@@ -53,7 +52,7 @@ if (isset($_POST['ok1'])) {
     $contactocontroller->agregar($contacto);
 
     header('Location: http://localhost/HSBUENA/addcontacto');
-    echo "Registro Insertado con exito";
+    exit; // Asegúrate de usar exit después de redirigir
 }
 
 ?>
@@ -65,14 +64,56 @@ if (isset($_POST['ok1'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Contacto</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- Incluir CSS de Select2 -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<!-- Incluir jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Estilo del input */
+        .material-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
 
-<!-- Incluir JS de Select2 -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        /* Estilo de la lista de sugerencias */
+        .suggestions-list {
+            border: 1px solid #ced4da;
+            max-height: 150px;
+            overflow-y: auto;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            z-index: 1000;
+            background-color: white;
+        }
+
+        /* Estilo de cada opción en la lista */
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        /* Estilo cuando se selecciona una opción */
+        .suggestion-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Mensaje de error */
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .group-material {
+            position: relative;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="content-page-container full-reset custom-scroll-containers">
@@ -132,7 +173,7 @@ if (isset($_POST['ok1'])) {
                         <!-- Título Universitario -->
                         <?php
                         $titulosUniversitarios = [
-                            "Ingeniero", "Téncico", "Licenciado", "Arquitecto", "Profesor", "Doctor", "Master"
+                            "Ingeniero", "Técnico", "Licenciado", "Arquitecto", "Profesor", "Doctor", "Master"
                         ];
                         ?>
                         <div class="group-material">
@@ -171,41 +212,24 @@ if (isset($_POST['ok1'])) {
                                 <option value='Director'>Director</option>
                             </select>
                         </div>
-                        <div class="group-material">
-    <label>Municipio</label>
-    <select class="material-control tooltips-general" name="idmunicipio" id="municipio" required="">
-        <option value='' disabled selected>Seleccione un municipio</option>
-        <?php foreach ($data as $item) {
-            echo "<option value='{$item['idmunicipio']}'>{$item['municipio']}</option>";
-        } ?>
-    </select>
-</div>
 
-<!-- Inicializar Select2 para el select de Municipio con búsqueda activa sin desplegar -->
-<script>
-    $(document).ready(function() {
-        $('#municipio').select2({
-            placeholder: "Seleccione o escriba un municipio",  // Placeholder
-            allowClear: true,  // Permitir borrar selección
-            tags: true,  // Habilitar escritura directa en el campo
-            width: '100%'  // Ancho completo
-        });
-    });
-</script>
+                        <!-- Municipio -->
+                        <div class="group-material">
+                            <input type="text" id="municipio" class="material-control tooltips-general" placeholder="Escriba un municipio" required="">
+                            <div class="suggestions-list" id="suggestions"></div>
+                            <div class="error-message" id="municipio-error">Este municipio no está disponible. Por favor, agrégalo en el apartado correspondiente.</div>
+                        </div>
 
                         <!-- Empresa -->
                         <div class="group-material">
-                            <label>Empresa</label>
                             <select class="material-control tooltips-general" name="idempresa" id="empresa" required="">
                                 <option value='' disabled selected>Seleccione una empresa</option>
+                                <!-- Las empresas se cargarán dinámicamente -->
                             </select>
                         </div>
 
-                        <!-- Botones -->
-                        <p class="text-center">
-                            <button type="reset" class="btn btn-info" style="margin-right: 20px;">Limpiar</button>
-                            <button type="submit" name="ok1" class="btn btn-primary">Guardar</button>
-                        </p>
+                        <!-- Botón para enviar -->
+                        <button type="submit" name="ok1" class="btn btn-primary">Registrar Contacto</button>
                     </div>
                 </div>
             </form>
@@ -214,48 +238,43 @@ if (isset($_POST['ok1'])) {
 
     <script>
         $(document).ready(function() {
-            $('#municipio').on('change', function() {
-                var municipioId = $(this).val();
-                if (municipioId) {
+            // Autocompletar municipios
+            $("#municipio").on("input", function() {
+                var query = $(this).val();
+                if (query !== '') {
                     $.ajax({
-                        type: 'POST',
-                        url: '', // Esta es la misma página, puedes cambiarlo si prefieres otro archivo PHP
-                        data: {idmunicipio: municipioId},
-                        success: function(response) {
-                            $('#empresa').html(response);
+                        url: "buscar_municipios.php",
+                        method: "POST",
+                        data: {query: query},
+                        success: function(data) {
+                            $('#suggestions').html(data);
                         }
                     });
                 } else {
-                    $('#empresa').html('<option value="">Seleccione un municipio primero</option>');
+                    $('#suggestions').empty();
                 }
             });
+
+            // Al hacer clic en una sugerencia
+            $(document).on('click', '.suggestion-item', function() {
+                var municipio = $(this).text();
+                $('#municipio').val(municipio);
+                $('#suggestions').empty();
+                cargarEmpresas(municipio); // Cargar empresas al seleccionar municipio
+            });
+
+            // Cargar empresas basado en el municipio
+            function cargarEmpresas(municipio) {
+                $.ajax({
+                    url: "cargar_empresas.php",
+                    method: "POST",
+                    data: {municipio: municipio},
+                    success: function(data) {
+                        $('#empresa').html(data);
+                    }
+                });
+            }
         });
     </script>
-
-    <?php
-    // Procesar la solicitud AJAX para obtener las empresas
-    if (isset($_POST['idmunicipio'])) {
-        $idmunicipio = $_POST['idmunicipio'];
-        $sql = "SELECT idempresa, nomempresa FROM pr_empresa WHERE idmunicipio = ?";
-        
-        if ($stmt = $cn->prepare($sql)) {
-            $stmt->bind_param("i", $idmunicipio);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            if ($result->num_rows > 0) {
-                echo "<option value='' disabled selected>Seleccione una empresa</option>";
-                while ($row = $result->fetch_assoc()) {
-                    echo "<option value='{$row['idempresa']}'>{$row['nomempresa']}</option>";
-                }
-            } else {
-                echo "<option value=''>No hay empresas disponibles</option>";
-            }
-        } else {
-            echo "<option value=''>Error en la consulta</option>";
-        }
-        exit();
-    }
-    ?>
 </body>
 </html>
