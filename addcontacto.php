@@ -65,6 +65,14 @@ if (isset($_POST['ok1'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Contacto</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Incluir CSS de Select2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Incluir jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Incluir JS de Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body>
     <div class="content-page-container full-reset custom-scroll-containers">
@@ -163,17 +171,27 @@ if (isset($_POST['ok1'])) {
                                 <option value='Director'>Director</option>
                             </select>
                         </div>
-
-                        <!-- Municipio -->
                         <div class="group-material">
-                            <label>Municipio</label>
-                            <select class="material-control tooltips-general" name="idmunicipio" id="municipio" required="">
-                                <option value='' disabled selected>Seleccione un municipio</option>
-                                <?php foreach ($data as $item) {
-                                    echo "<option value='{$item['idmunicipio']}'>{$item['municipio']}</option>";
-                                } ?>
-                            </select>
-                        </div>
+    <label>Municipio</label>
+    <select class="material-control tooltips-general" name="idmunicipio" id="municipio" required="">
+        <option value='' disabled selected>Seleccione un municipio</option>
+        <?php foreach ($data as $item) {
+            echo "<option value='{$item['idmunicipio']}'>{$item['municipio']}</option>";
+        } ?>
+    </select>
+</div>
+
+<!-- Inicializar Select2 para el select de Municipio con búsqueda activa sin desplegar -->
+<script>
+    $(document).ready(function() {
+        $('#municipio').select2({
+            placeholder: "Seleccione o escriba un municipio",  // Placeholder
+            allowClear: true,  // Permitir borrar selección
+            tags: true,  // Habilitar escritura directa en el campo
+            width: '100%'  // Ancho completo
+        });
+    });
+</script>
 
                         <!-- Empresa -->
                         <div class="group-material">
