@@ -13,44 +13,32 @@ $alumnocontroller = new AlumnoController();
 $alumno = new Alumno();
 
 if (isset($_POST['ok1'])) {
-    $carnet=$_POST["carnet"];
+    $carnet = $_POST["carnet"];
 
-    $sql=" SELECT * FROM alumno WHERE carnet = '".$carnet."' ";
-    $rs=$cn->query($sql);
+    $sql = "SELECT * FROM alumno WHERE carnet = '" . $carnet . "' ";
+    $rs = $cn->query($sql);
 
     if ($rs->num_rows > 0) {
-  
-    echo "Carnet Existente";
-      }if($rs->num_rows == 0){
+        echo "Carnet Existente";
+    } 
+    if ($rs->num_rows == 0) {
+        $alumno->setCarnet($_POST["carnet"]);
+        $alumno->setNombre($_POST["nombre"]);
+        $alumno->setApellido($_POST["apellido"]);
+        $alumno->setTelefono($_POST["telefono"]);
+        $alumno->setGrupo($_POST["grupo"]);
+        $alumno->setSexo($_POST["sexo"]);
+        $alumno->setEmail($_POST["email"]);
+        $alumno->setYearIngreso($_POST["yearingreso"]);
+        $alumno->setCarrera($_POST["carrera"]);
 
-
-
-    $alumno->setCarnet($_POST["carnet"]);
-    $alumno->setNombre($_POST["nombre"]);
-    $alumno->setApellido($_POST["apellido"]);
-    $alumno->setTelefono($_POST["telefono"]);
-    $alumno->setGrupo($_POST["grupo"]);
-    $alumno->setSexo($_POST["sexo"]);
-    $alumno->setEmail($_POST["email"]);
-    $alumno->setYearIngreso($_POST["yearingreso"]);
-    $alumno->setCarrera($_POST["carrera"]);
-
-    $alumnocontroller->agregar($alumno);
-
-    header('Location: http://localhost/HSBUENA/login.php');
+        $alumnocontroller->agregar($alumno);
+        header('Location: http://localhost/HSBUENA/login.php');
+    }
 }
-}
-
-
 ?>
 
-<?php 
-
-require_once("bootstrap.php");
-
-?>
-
-
+<?php require_once("bootstrap.php"); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -160,17 +148,18 @@ require_once("bootstrap.php");
                                 <input type="text" id="telefono" name="telefono" class="form-control" required />
                                 <label class="form-label" for="telefono">Teléfono</label>
                             </div>
+                            
+                            <!-- Sexo select -->
                             <div data-mdb-input-init class="form-outline mb-4">
                                 <select id="sexo" name="sexo" class="form-select" required>
                                     <option value="" disabled selected>Selecciona tu sexo</option>
                                     <option value="M">Masculino</option>
                                     <option value="F">Femenino</option>
-                                    <!-- Agrega más opciones según sea necesario -->
                                 </select>
                                 <label class="form-label" for="sexo">Sexo</label>
                             </div>
 
-
+                            <!-- Email input -->
                             <div data-mdb-input-init class="form-outline mb-4">
                                 <input type="email" id="email" name="email" class="form-control" required />
                                 <label class="form-label" for="email">Email</label>
@@ -184,81 +173,31 @@ require_once("bootstrap.php");
                                     <option value="2023">2023</option>
                                     <option value="2022">2022</option>
                                     <option value="2021">2021</option>
-                                    <!-- Agrega más opciones según sea necesario -->
                                 </select>
                                 <label class="form-label" for="yearingreso">Año de Ingreso</label>
                             </div>
 
+                            <!-- Carrera select -->
                             <div data-mdb-input-init class="form-outline mb-4">
                                 <select id="carrera" name="carrera" class="form-select" required>
                                     <option value="" disabled selected>Selecciona tu carrera</option>
-                                    <option value="Tecnico en Ingenieria en Desarrollo de Software">Tecnico en Ingenieria en Desarrollo de Software</option>
-                                    <option value="Tecnico en Ingenieria Electrica">Tecnico en Ingenieria Electrica</option>
-                                    <option value="Tecnico en Hardware Computacional">Tecnico en Hardware Computacional</option>
-                                    <!-- Agrega más opciones según sea necesario -->
+                                    <option value="Tecnico en Ingenieria en Desarrollo de Software" data-grupos="SOFT11, SOFT12, SOFT13, SOFT21, SOFT22, SOFT23">Tecnico en Ingenieria en Desarrollo de Software</option>
+                                    <option value="Tecnico en Ingenieria Electrica" data-grupos="ELEC11, ELEC12, ELEC13, ELEC21, ELEC22, ELEC23">Tecnico en Ingenieria Electrica</option>
+                                    <option value="Tecnico en Hardware Computacional" data-grupos="HARD11, HARD12, HARD13, HARD21, HARD22, HARD23">Tecnico en Hardware Computacional</option>
                                 </select>
                                 <label class="form-label" for="carrera">Carrera</label>
                             </div>
 
                             <!-- Grupo select -->
                             <div data-mdb-input-init class="form-outline mb-4">
-    <select id="grupo" name="grupo" class="form-select" required>
-        <option value="" disabled selected>Selecciona tu grupo</option>
-        <option value="ELEC11">ELEC11</option>
-        <option value="ELEC12">ELEC12</option>
-        <option value="ELEC13">ELEC13</option>
-        <option value="ELEC21">ELEC21</option>
-        <option value="ELEC22">ELEC22</option>
-        <option value="ELEC23">ELEC23</option>
-        <option value="ELEC31">ELEC31</option>
-        <option value="ELEC32">ELEC32</option>
-        <option value="ELEC41">ELEC41</option>
-        <option value="ELEC42">ELEC42</option>
-        <option value="SOFT11">SOFT11</option>
-        <option value="SOFT12">SOFT12</option>
-        <option value="SOFT13">SOFT13</option>
-        <option value="SOFT21">SOFT21</option>
-        <option value="SOFT22">SOFT22</option>
-        <option value="SOFT23">SOFT23</option>
-        <option value="SOFT31">SOFT31</option>
-        <option value="SOFT32">SOFT32</option>
-        <option value="SOFT41">SOFT41</option>
-        <option value="SOFT42">SOFT42</option>
-        <option value="HARD11">HARD11</option>
-        <option value="HARD12">HARD12</option>
-        <option value="HARD13">HARD13</option>
-        <option value="HARD21">HARD21</option>
-        <option value="HARD22">HARD22</option>
-        <option value="HARD23">HARD23</option>
-        <option value="HARD31">HARD31</option>
-        <option value="HARD32">HARD32</option>
-        <option value="HARD41">HARD41</option>
-        <option value="HARD42">HARD42</option>
-    </select>
-    <label class="form-label" for="grupo">Grupo</label>
-</div>
-
-
-                            <!-- Sexo select -->
-
-
-                            <!-- Email input -->
-
-
-                            <!-- Carrera select -->
-
+                                <select id="grupo" name="grupo" class="form-select" required>
+                                    <option value="" disabled selected>Selecciona tu grupo</option>
+                                </select>
+                                <label class="form-label" for="grupo">Grupo</label>
+                            </div>
 
                             <!-- Submit button -->
-                            <button type="submit" data-mdb-button-init data-mdb-ripple-init name="ok1" class="btn btn-primary btn-block mb-4">
-                                Entrar
-                            </button>
-
-                            <!-- Register buttons -->
-                            <div class="text-center">
-                                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
-                                    <i class="fab fa-facebook-f"></i>
-                                </button>
-                            </div>
+                            <button type="submit" name="ok1" class="btn btn-primary btn-block mb-4">Registrar</button>
                         </form>
                     </div>
                 </div>
@@ -267,7 +206,29 @@ require_once("bootstrap.php");
     </div>
 </section>
 
-<!-- MDB -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const carreraSelect = document.getElementById('carrera');
+        const grupoSelect = document.getElementById('grupo');
+
+        carreraSelect.addEventListener('change', function() {
+            const grupos = this.selectedOptions[0].dataset.grupos;
+
+            // Limpiar el select de grupos
+            grupoSelect.innerHTML = '<option value="" disabled selected>Selecciona tu grupo</option>';
+
+            if (grupos) {
+                const gruposArray = grupos.split(', ');
+                gruposArray.forEach(grupo => {
+                    const option = document.createElement('option');
+                    option.value = grupo;
+                    option.textContent = grupo;
+                    grupoSelect.appendChild(option);
+                });
+            }
+        });
+    });
+</script>
 </body>
 </html>
