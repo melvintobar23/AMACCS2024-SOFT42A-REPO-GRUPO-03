@@ -1,9 +1,13 @@
 <?php 
-session_start();
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 
 session_destroy();
-
-header('Location: http://localhost/HSBUENA/inicio.php');
+header("location: inicio.php");
+exit;
 
 
 ?>

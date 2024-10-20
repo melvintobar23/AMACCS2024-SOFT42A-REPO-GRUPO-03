@@ -38,8 +38,6 @@ if (isset($_POST['ok1'])) {
 }
 ?>
 
-<?php require_once("bootstrap.php"); ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,6 +99,29 @@ if (isset($_POST['ok1'])) {
 
         .btn-primary {
             margin-top: 1rem;
+            background-color: #007bff;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        /* Animations */
+        .animate-input {
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -126,47 +147,47 @@ if (isset($_POST['ok1'])) {
                     <div class="card-body px-4 py-5 px-md-5">
                         <form method="post">
                             <!-- Carnet input -->
-                            <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="text" id="carnet" name="carnet" class="form-control" required />
+                            <div data-mdb-input-init class="form-outline mb-4 animate-input">
+                                <input type="text" id="carnet" name="carnet" class="form-control" required 
+                                       pattern="\d+" title="Solo se permiten números" inputmode="numeric" />
                                 <label class="form-label" for="carnet">Carnet</label>
                             </div>
 
                             <!-- Nombre input -->
-                            <div data-mdb-input-init class="form-outline mb-4">
+                            <div data-mdb-input-init class="form-outline mb-4 animate-input">
                                 <input type="text" id="nombre" name="nombre" class="form-control" required />
                                 <label class="form-label" for="nombre">Nombre</label>
                             </div>
 
                             <!-- Apellido input -->
-                            <div data-mdb-input-init class="form-outline mb-4">
+                            <div data-mdb-input-init class="form-outline mb-4 animate-input">
                                 <input type="text" id="apellido" name="apellido" class="form-control" required />
                                 <label class="form-label" for="apellido">Apellido</label>
                             </div>
 
                             <!-- Teléfono input -->
-                            <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="text" id="telefono" name="telefono" class="form-control" required />
+                            <div data-mdb-input-init class="form-outline mb-4 animate-input">
+                                <input type="text" id="inputTelefono" name="telefono" class="form-control" required />
                                 <label class="form-label" for="telefono">Teléfono</label>
                             </div>
-                            
+
                             <!-- Sexo select -->
-                            <div data-mdb-input-init class="form-outline mb-4">
+                            <div data-mdb-input-init class="form-outline mb-4 animate-input">
                                 <select id="sexo" name="sexo" class="form-select" required>
                                     <option value="" disabled selected>Selecciona tu sexo</option>
                                     <option value="M">Masculino</option>
                                     <option value="F">Femenino</option>
                                 </select>
-                                <label class="form-label" for="sexo">Sexo</label>
                             </div>
 
                             <!-- Email input -->
-                            <div data-mdb-input-init class="form-outline mb-4">
+                            <div data-mdb-input-init class="form-outline mb-4 animate-input">
                                 <input type="email" id="email" name="email" class="form-control" required />
                                 <label class="form-label" for="email">Email</label>
                             </div>
 
                             <!-- Año de Ingreso select -->
-                            <div data-mdb-input-init class="form-outline mb-4">
+                            <div data-mdb-input-init class="form-outline mb-4 animate-input">
                                 <select id="yearingreso" name="yearingreso" class="form-select" required>
                                     <option value="" disabled selected>Selecciona tu año de ingreso</option>
                                     <option value="2024">2024</option>
@@ -178,7 +199,7 @@ if (isset($_POST['ok1'])) {
                             </div>
 
                             <!-- Carrera select -->
-                            <div data-mdb-input-init class="form-outline mb-4">
+                            <div data-mdb-input-init class="form-outline mb-4 animate-input">
                                 <select id="carrera" name="carrera" class="form-select" required>
                                     <option value="" disabled selected>Selecciona tu carrera</option>
                                     <option value="Tecnico en Ingenieria en Desarrollo de Software" data-grupos="SOFT11, SOFT12, SOFT13, SOFT21, SOFT22, SOFT23">Tecnico en Ingenieria en Desarrollo de Software</option>
@@ -189,7 +210,7 @@ if (isset($_POST['ok1'])) {
                             </div>
 
                             <!-- Grupo select -->
-                            <div data-mdb-input-init class="form-outline mb-4">
+                            <div data-mdb-input-init class="form-outline mb-4 animate-input">
                                 <select id="grupo" name="grupo" class="form-select" required>
                                     <option value="" disabled selected>Selecciona tu grupo</option>
                                 </select>
@@ -228,6 +249,20 @@ if (isset($_POST['ok1'])) {
                 });
             }
         });
+    });
+
+    const inputTelefono = document.getElementById('inputTelefono');
+
+    inputTelefono.addEventListener('input', function (e) {
+        let telefono = e.target.value.replace(/\D/g, ''); // Elimina caracteres no numéricos
+        if (telefono.length > 4) {
+            telefono = telefono.slice(0, 4) + '-' + telefono.slice(4);
+        }
+        e.target.value = telefono.slice(0, 9); // Asegura que solo se introduzcan 8 dígitos + el guion
+    });
+
+    document.getElementById('carnet').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, ''); // Elimina todo lo que no sea un número
     });
 </script>
 </body>

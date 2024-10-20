@@ -3,53 +3,44 @@
 session_start();
 
 require_once("bootstrap.php");
-
 require_once("Controladores/alumno_controller.php");
 require_once("Modelos/alumno.php");
 
 $alumnocontroller = new AlumnoController();
 $alumno = new Alumno();
 
+$error_message = ""; // Variable para almacenar mensajes de error
+
 if (isset($_POST['ok1'])) {
 
-  $carnet=$_POST["carnet"];
+    $carnet = $_POST["carnet"];
+    $_SESSION["carnet"] = $carnet;
 
-  $_SESSION["carnet"] =$carnet;
+    $alumno->setCarnet($carnet);
+    $alumno->setClave($_POST["clave"]);
 
+    $alumnocontroller->listar();
 
+    $found = false; // Para verificar si el alumno fue encontrado
 
-  $alumno->setCarnet($_POST["carnet"]);
-  $alumno->setClave($_POST["clave"]);
+    foreach ($alumnocontroller->listar() as $alumno) {
+        if ($alumno->GetCarnet() == $carnet && $alumno->GetClave() == $_POST["clave"]) {
+            header('Location: http://localhost/HSBUENA/indexalumno.php');
+            $found = true;
+            exit(); // Salir después de redirigir
+        }
+    }
 
-  $alumnocontroller->listar();
-
-foreach($alumnocontroller->listar() as $alumno){
-  if($alumno->GetCarnet() == $_POST["carnet"] and $alumno->GetClave()==$_POST["clave"]){
-
-    header('Location: http://localhost/HSBUENA/indexalumno.php');
-  }
-
+    if (!$found) {
+        if ($alumno->GetCarnet() !== $carnet) {
+            $error_message = "Carnet no registrado.";
+        } elseif ($alumno->GetClave() !== $_POST["clave"]) {
+            $error_message = "Contraseña incorrecta.";
+        } else {
+            $error_message = "Credenciales incorrectas.";
+        }
+    }
 }
-
-if($alumno->GetCarnet() !== $_POST["carnet"]){
-
-echo "Carnet no Registrado";
-
-}
-
-if($alumno->GetClave() !== $_POST["clave"]){
-
-  echo "Contraseña Incorrecta";
-  
-  }
-
-
-
-
-
-
-}
-
 ?>
 
 
@@ -71,29 +62,20 @@ if($alumno->GetClave() !== $_POST["clave"]){
   }
 
 } -->
-
-
-
-
-
-
-
-<section class="background-radial-gradient overflow-hidden">
+<section class="background-gradient overflow-hidden">
   <style>
-    .background-radial-gradient {
-      background-color: hsl(218, 41%, 15%);
+    .background-gradient {
+      background-color: hsl(210, 36%, 16%);
       background-image: radial-gradient(650px circle at 0% 0%,
-          hsl(218, 41%, 35%) 15%,
-          hsl(218, 41%, 30%) 35%,
-          hsl(218, 41%, 20%) 75%,
-          hsl(218, 41%, 19%) 80%,
-          transparent 100%),
+          hsl(210, 36%, 40%) 15%,
+          hsl(210, 36%, 30%) 35%,
+          hsl(210, 36%, 20%) 75%,
+          hsl(210, 36%, 15%) 100%),
         radial-gradient(1250px circle at 100% 100%,
-          hsl(218, 41%, 45%) 15%,
-          hsl(218, 41%, 30%) 35%,
-          hsl(218, 41%, 20%) 75%,
-          hsl(218, 41%, 19%) 80%,
-          transparent 100%);
+          hsl(210, 36%, 40%) 15%,
+          hsl(210, 36%, 30%) 35%,
+          hsl(210, 36%, 20%) 75%,
+          hsl(210, 36%, 15%) 100%);
     }
 
     #radius-shape-1 {
@@ -101,7 +83,7 @@ if($alumno->GetClave() !== $_POST["clave"]){
       width: 220px;
       top: -60px;
       left: -130px;
-      background: radial-gradient(#44006b, #ad1fff);
+      background: radial-gradient(#007bff, #6610f2);
       overflow: hidden;
     }
 
@@ -111,26 +93,99 @@ if($alumno->GetClave() !== $_POST["clave"]){
       right: -110px;
       width: 300px;
       height: 300px;
-      background: radial-gradient(#44006b, #ad1fff);
+      background: radial-gradient(#007bff, #6610f2);
       overflow: hidden;
     }
 
     .bg-glass {
-      background-color: hsla(0, 0%, 100%, 0.9) !important;
-      backdrop-filter: saturate(200%) blur(25px);
+      background-color: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(20px);
+    }
+
+    .login-container {
+      max-width: 400px;
+      margin: auto;
+      padding: 40px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    /* Animación para el fadeIn */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Animación para los inputs */
+    .animate-input {
+      animation: slideIn 0.8s ease-out;
+    }
+
+    @keyframes slideIn {
+      0% {
+        transform: translateX(-100px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Botones */
+    button {
+      background-color: #007bff;
+      border-color: #007bff;
+      animation: buttonPop 1.2s ease-in-out;
+      transition: background-color 0.3s ease;
+      color: #fff;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    /* Sombra y ajuste para las tarjetas */
+    .card {
+      border: none;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Cambios en el texto */
+    h1 {
+      color: #ffffff;
+    }
+
+    p {
+      color: #cccccc;
+    }
+
+    /* Ajuste del tamaño del texto en móviles */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.5rem;
+      }
     }
   </style>
 
   <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
     <div class="row gx-lg-5 align-items-center mb-5">
       <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
-        <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+        <h1 class="my-5 display-5 fw-bold ls-tight">
           Bienvenido al Registro de Horas Sociales <br />
-          <span style="color: hsl(218, 81%, 75%)">For ITCA Fepade Santa Ana</span>
+          <span style="color: hsl(218, 81%, 75%)">For ITCA-FEPADE Santa Ana</span>
         </h1>
-        <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
-Favor de ingresar sus credenciales para acceder al sistema, en dado sea su primera vez, favor de registrarse, dando click en <a href="registro.php">Registrarse</a>,
-Toma en cuenta que la contraseña por defecto es <b>itca</b>.
+        <p class="mb-4 opacity-70">
+          Favor de ingresar sus credenciales para acceder al sistema, en caso de ser su primera vez, regístrese dando clic en <a href="registro.php">Registrarse</a>. La contraseña por defecto es <b>itca</b>.
         </p>
       </div>
 
@@ -141,41 +196,56 @@ Toma en cuenta que la contraseña por defecto es <b>itca</b>.
         <div class="card bg-glass">
           <div class="card-body px-4 py-5 px-md-5">
             <form method="post">
-              <!-- 2 column grid layout with text inputs for the first and last names -->
+              <div class="login-container">
+                <div data-mdb-input-init class="form-outline mb-4 animate-input">
+                  <input type="text" id="carnet" name="carnet" class="form-control" Required/>
+                  <label class="form-label" for="carnet">Carnet</label>
+                </div>
 
-              <!-- Email input -->
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input type="text" id="form3Example3" name="carnet"class="form-control" />
-                <label class="form-label" for="form3Example3">Carnet</label>
+                <div data-mdb-input-init class="form-outline mb-4 animate-input">
+                  <input type="password" id="form3Example4" name="clave" class="form-control" />
+                  <label class="form-label" for="form3Example4">Contraseña</label>
+                </div> 
+                <?php if ($error_message): ?>
+    <div class="alert alert-danger" role="alert" id="alert-message">
+        <?php echo $error_message; ?>
+    </div>
+    <script>
+        function hideAlert() {
+            var alert = document.getElementById('alert-message');
+            if (alert) {
+                alert.style.display = 'none';
+            }
+        }
+
+        var inputs = document.querySelectorAll('input');
+        inputs.forEach(function(input) {
+            input.addEventListener('click', hideAlert);
+        });
+    </script>
+<?php endif; ?>
+
+
+
+                <button type="submit" name="ok1" class="btn btn-primary btn-block mb-4">
+                  Entrar
+                </button>
               </div>
 
-              <!-- Password input -->
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input type="password" id="form3Example4" name="clave" class="form-control" />
-                <label class="form-label" for="form3Example4">Contraseña</label>
-              </div>
-
-              <!-- Checkbox -->
-              <!-- Submit button -->
-              <button type="submit" name="ok1"data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">
-                Entrar
-              </button>
-
-              <!-- Register buttons -->
               <div class="text-center">
-                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                <button type="button" class="btn btn-link btn-floating mx-1">
                   <i class="fab fa-facebook-f"></i>
                 </button>
 
-                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                <button type="button" class="btn btn-link btn-floating mx-1">
                   <i class="fab fa-google"></i>
                 </button>
 
-                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                <button type="button" class="btn btn-link btn-floating mx-1">
                   <i class="fab fa-twitter"></i>
                 </button>
 
-                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                <button type="button" class="btn btn-link btn-floating mx-1">
                   <i class="fab fa-github"></i>
                 </button>
               </div>
@@ -186,4 +256,8 @@ Toma en cuenta que la contraseña por defecto es <b>itca</b>.
     </div>
   </div>
 </section>
-<!-- Section: Design Block -->
+<script>
+        document.getElementById('carnet').addEventListener('input', function (e) {
+    this.value = this.value.replace(/\D/g, ''); // Elimina todo lo que no sea un número
+});
+  </script>

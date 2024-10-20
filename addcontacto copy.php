@@ -54,7 +54,6 @@ if (isset($_POST['ok1'])) {
     header('Location: http://localhost/HSBUENA/addcontacto');
     exit; // Asegúrate de usar exit después de redirigir
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +67,34 @@ if (isset($_POST['ok1'])) {
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <style>
-        /* Estilo del input */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .container-fluid {
+            margin: 50px auto;
+            max-width: 800px; /* Limitar el ancho del contenedor */
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px; /* Agregar padding al contenedor */
+        }
+
+        .title-flat-form {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .group-material {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
         .material-control {
             width: 100%;
             padding: 8px;
@@ -76,32 +102,14 @@ if (isset($_POST['ok1'])) {
             border-radius: 4px;
             font-size: 14px;
             box-sizing: border-box;
+            transition: border-color 0.3s; /* Transición suave al enfoque */
         }
 
-        /* Estilo de la lista de sugerencias */
-        .suggestions-list {
-            border: 1px solid #ced4da;
-            max-height: 150px;
-            overflow-y: auto;
-            width: 100%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            position: absolute;
-            z-index: 1000;
-            background-color: white;
+        .material-control:focus {
+            border-color: #007bff; /* Cambiar el color de borde al enfocar */
+            outline: none; /* Eliminar el contorno predeterminado */
         }
 
-        /* Estilo de cada opción en la lista */
-        .suggestion-item {
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        /* Estilo cuando se selecciona una opción */
-        .suggestion-item:hover {
-            background-color: #f0f0f0;
-        }
-
-        /* Mensaje de error */
         .error-message {
             color: red;
             font-size: 12px;
@@ -109,9 +117,18 @@ if (isset($_POST['ok1'])) {
             display: none;
         }
 
-        .group-material {
-            position: relative;
-            margin-bottom: 20px;
+        button {
+            background-color: #007bff; /* Color del botón */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Color del botón al pasar el mouse */
         }
     </style>
 </head>
@@ -119,83 +136,75 @@ if (isset($_POST['ok1'])) {
     <div class="content-page-container full-reset custom-scroll-containers">
         <nav class="navbar-user-top full-reset">
             <ul class="list-unstyled full-reset">
-                <figure>
-                    <img src="assets/img/user01.png" alt="user-picture" class="img-responsive img-circle center-box">
-                </figure>
+            <figure>
+    <img src="assets/img/user01.png" alt="user-picture" class="img-responsive img-circle center-box" style="max-width: 70px; max-height: 70px;">
+</figure>
+
                 <?php 
                 // Mostrar nombre del alumno logueado
                 while ($fila = $rs->fetch_assoc()) {
                     echo "<li style='color:#fff; cursor:default;'>
-                            <span class='all-tittles'>{$fila['nombre']}_{$fila['apellido']}</span>
+                            <span class='all-tittles'>{$fila['nombre']} {$fila['apellido']}</span>
                           </li>";
                 }
                 ?>
-                <li class="tooltips-general exit-system-button" data-href="cerrar" title="Salir del sistema">
+                <li class="tooltips-general exit-system-button" data-href="cerrar.php" title="Salir del sistema">
                     <i class="zmdi zmdi-power"></i>
                 </li>
             </ul>
         </nav>
         
-        <div class="container-fluid" style="margin: 50px 0;">
-            <div class="container-flat-form">
-                <div class="title-flat-form title-flat-blue">Agregar Contacto</div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-4 col-md-3">
-                        <img src="assets/img/user04.png" alt="user" class="img-responsive center-box" style="max-width: 110px;">
-                    </div>
-                    <div class="col-xs-12 col-sm-8 col-md-8 text-justify lead">
-                        Bienvenido a la sección para registrar un nuevo Contacto, Favor de llenar los campos solicitados.
-                    </div>
+        <div class="container-fluid">
+            <div class="title-flat-form">Agregar Contacto</div>
+            <div class="row">
+                <div class="col-xs-12 text-justify lead">
+                    Bienvenido a la sección de registrar un nuevo Contacto
                 </div>
             </div>
 
             <form method="post">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                    <div class="col-xs-12 col-sm-12">
                         <!-- Nombre -->
                         <div class="group-material">
-                            <input type="text" class="material-control tooltips-general" name="nombre" required="" maxlength="50">
-                            <label>Nombre</label>
+                            <input type="text" class="material-control" name="nombre" required="" maxlength="50" placeholder="Nombre">
                         </div>
 
                         <!-- Apellido -->
                         <div class="group-material">
-                            <input type="text" class="material-control tooltips-general" name="apellido" required="" maxlength="70">
-                            <label>Apellido</label>
+                            <input type="text" class="material-control" name="apellido" required="" maxlength="70" placeholder="Apellido">
                         </div>
 
                         <!-- Teléfono -->
                         <div class="group-material">
-                            <input type="text" class="material-control tooltips-general" name="telefono" required="" pattern="[0-9]{8}" maxlength="8">
-                            <label>Teléfono</label>
+                            <input type="text" class="material-control" name="telefono" required="" pattern="[0-9]{8}" maxlength="8" placeholder="Teléfono">
                         </div>
 
                         <!-- Título Universitario -->
-                        <?php
-                        $titulosUniversitarios = [
-                            "Ingeniero", "Técnico", "Licenciado", "Arquitecto", "Profesor", "Doctor", "Master"
-                        ];
-                        ?>
                         <div class="group-material">
                             <label>Título Universitario</label>
-                            <select class="material-control tooltips-general" name="titulo" required="">
-                                <?php foreach ($titulosUniversitarios as $titulo) {
+                            <select class="material-control" name="titulo" required="">
+                                <?php
+                                $titulosUniversitarios = [
+                                    "Ingeniero", "Técnico", "Licenciado", "Arquitecto", "Profesor", "Doctor", "Master"
+                                ];
+                                foreach ($titulosUniversitarios as $titulo) {
                                     echo "<option value='$titulo'>$titulo</option>";
-                                } ?>
+                                }
+                                ?>
                             </select>
                         </div>
 
                         <!-- Email -->
                         <div class="group-material">
-                            <input type="email" class="material-control tooltips-general" name="email" required="" maxlength="50">
-                            <label>Email</label>
+                            <input type="email" class="material-control" name="email" required="" maxlength="50" placeholder="Email">
                         </div>
 
                         <!-- Sexo -->
                         <div class="group-material">
                             <label>Sexo</label>
-                            <select class="material-control tooltips-general" name="sexo" required="">
-                                <option value='' disabled selected></option>
+                            <select class="material-control" name="sexo" required="">
+                                <option value='' disabled selected>Seleccione una opción</option>
                                 <option value='M'>Masculino</option>
                                 <option value='F'>Femenino</option>
                                 <option value='Otro'>Otro</option>
@@ -205,7 +214,7 @@ if (isset($_POST['ok1'])) {
                         <!-- Cargo -->
                         <div class="group-material">
                             <label>Cargo</label>
-                            <select class="material-control tooltips-general" name="idcargo" required="">
+                            <select class="material-control" name="idcargo" required="">
                                 <option value='Supervisor'>Supervisor</option>
                                 <option value='Gerente'>Gerente</option>
                                 <option value='Administrador'>Administrador</option>
@@ -215,21 +224,22 @@ if (isset($_POST['ok1'])) {
 
                         <!-- Municipio -->
                         <div class="group-material">
-                            <input type="text" id="municipio" class="material-control tooltips-general" placeholder="Escriba un municipio" required="">
+                            <input type="text" id="municipio" class="material-control" placeholder="Escriba un municipio" required="">
                             <div class="suggestions-list" id="suggestions"></div>
                             <div class="error-message" id="municipio-error">Este municipio no está disponible. Por favor, agrégalo en el apartado correspondiente.</div>
                         </div>
 
                         <!-- Empresa -->
                         <div class="group-material">
-                            <select class="material-control tooltips-general" name="idempresa" id="empresa" required="">
+                            <label>Empresa</label>
+                            <select class="material-control" name="idempresa" id="empresa" required="">
                                 <option value='' disabled selected>Seleccione una empresa</option>
                                 <!-- Las empresas se cargarán dinámicamente -->
                             </select>
                         </div>
 
                         <!-- Botón para enviar -->
-                        <button type="submit" name="ok1" class="btn btn-primary">Registrar Contacto</button>
+                        <button type="submit" name="ok1">Registrar Contacto</button>
                     </div>
                 </div>
             </form>

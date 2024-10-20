@@ -45,38 +45,37 @@ $resultado=$cn->query($sql);
     <script src="js/main.js"></script>
 
     <style>
-      article {
-margin-right:200px !important;
-      }
-
-      body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    background-color: #f8f9fa;
-}
-
-.container {
-    max-width: 600px;
-    width: 100%;
-    padding: 15px;
-}
-
-.card {
-    width: 100%;
-}
-
-.card-header {
-    background-color: #343a40;
-    color: white;
-    text-align: center;
-}
-
-.larger-text {
-    font-size: 1.5rem;
-}
+        .form-container {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            padding: 15px;
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .form-control {
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+        .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+        .larger-text {
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -154,9 +153,6 @@ while ($fila=$rs->fetch_assoc()) {
 ?>
                 <li  class="tooltips-general exit-system-button" data-href="cerrar.php" data-placement="bottom" title="Salir del sistema">
                     <i class="zmdi zmdi-power"></i>
-                </li>
-                <li  class="tooltips-general search-book-button" data-href="searchbook.html" data-placement="bottom" title="Buscar libro">
-                    <i class="zmdi zmdi-search"></i>
                 </li>
                 <li  class="tooltips-general btn-help" data-placement="bottom" title="Ayuda">
                     <i class="zmdi zmdi-help-outline zmdi-hc-fw"></i>

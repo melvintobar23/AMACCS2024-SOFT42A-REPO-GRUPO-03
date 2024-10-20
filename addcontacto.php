@@ -14,6 +14,7 @@ require_once("Modelos/alumno.php");
 require_once("Modelos/contacto.php");
 require_once("bootstrap.php");
 require_once("cn.php");
+require_once("menualumno.php");
 
 // Verificar si el usuario ha iniciado sesión
 if (isset($_SESSION["carnet"])) {
@@ -113,6 +114,7 @@ if (isset($_POST['ok1'])) {
             position: relative;
             margin-bottom: 20px;
         }
+        
     </style>
 </head>
 <body>
@@ -134,7 +136,10 @@ if (isset($_POST['ok1'])) {
                     <i class="zmdi zmdi-power"></i>
                 </li>
             </ul>
+
+            
         </nav>
+        
         
         <div class="container-fluid" style="margin: 50px 0;">
             <div class="container-flat-form">
@@ -166,7 +171,7 @@ if (isset($_POST['ok1'])) {
 
                         <!-- Teléfono -->
                         <div class="group-material">
-                            <input type="text" class="material-control tooltips-general" name="telefono" required="" pattern="[0-9]{8}" maxlength="8">
+                            <input type="text" id= 'inputTelefono' class="material-control tooltips-general" name="telefono" required="" pattern="[0-9]{8}" maxlength="8">
                             <label>Teléfono</label>
                         </div>
 
@@ -275,6 +280,19 @@ if (isset($_POST['ok1'])) {
                 });
             }
         });
+
+        const inputTelefono = document.getElementById('inputTelefono');
+
+        inputTelefono.addEventListener('input', function (e) {
+            let telefono = e.target.value.replace(/\D/g, ''); // Elimina caracteres no numéricos
+            if (telefono.length > 4) {
+                telefono = telefono.slice(0, 3) + '-' + telefono.slice(3);
+            }
+            e.target.value = telefono.slice(0, 9); // Asegura que solo se introduzcan 8 dígitos + el guion
+        });
+            
+        
     </script>
+    
 </body>
 </html>

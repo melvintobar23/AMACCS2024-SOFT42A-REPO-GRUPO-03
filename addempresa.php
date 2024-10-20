@@ -67,11 +67,7 @@ if (isset($_POST['ok1'])) {
 
 ?>
 
-<?php 
 
-require_once("bootstrap.php");
-
-?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -95,7 +91,7 @@ while ($fila=$rs->fetch_assoc()) {
 
 
 ?>
-                <li  class="tooltips-general exit-system-button" data-href="cerrar" data-placement="bottom" title="Salir del sistema">
+                <li  class="tooltips-general exit-system-button" data-href="cerrar.php" data-placement="bottom" title="Salir del sistema">
                     <i class="zmdi zmdi-power"></i>
                 </li>
                 <li  class="tooltips-general search-book-button" data-href="searchbook.html" data-placement="bottom" title="Buscar libro">
@@ -141,7 +137,7 @@ while ($fila=$rs->fetch_assoc()) {
                 <label>Nombre de la Empresa</label>
             </div>
             <div class='group-material'>
-                <input type='text' class='material-control tooltips-general' name='telefono' required='' maxlength='70' data-toggle='tooltip' data-placement='top' >
+                <input type='text' id ='inputTelefono' class='material-control tooltips-general' name='telefono' required='' maxlength='70' data-toggle='tooltip' data-placement='top' >
                 <span class='highlight'></span>
                 <span class='bar'></span>
                 <label>Telefono</label>
@@ -172,5 +168,16 @@ while ($fila=$rs->fetch_assoc()) {
         </div>
     </div>
 </form>
+<script>
+       const inputTelefono = document.getElementById('inputTelefono');
+
+inputTelefono.addEventListener('input', function (e) {
+    let telefono = e.target.value.replace(/\D/g, ''); // Elimina caracteres no numéricos
+    if (telefono.length > 4) {
+        telefono = telefono.slice(0, 4) + '-' + telefono.slice(4);
+    }
+    e.target.value = telefono.slice(0, 9); // Asegura que solo se introduzcan 8 dígitos + el guion
+});
+    </script>
 
 </form>
