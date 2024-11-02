@@ -19,7 +19,8 @@ class AlumnoController extends Conexion {
                     sexo = '".$alumno->GetSexo()."', 
                     email = '".$alumno->GetEmail()."', 
                     yearingreso = '".$alumno->GetYearIngreso()."', 
-                    carrera = '".$alumno->GetCarrera()."' 
+                    carrera = '".$alumno->GetCarrera()."',
+                    horas_sociales = '".$alumno->getHorasSociales()."'
                 WHERE carnet = '".$alumno->GetCarnet()."'";
         $this->ejecutarSQL($sql);
     }

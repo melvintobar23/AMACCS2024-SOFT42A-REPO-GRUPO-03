@@ -9,19 +9,43 @@ require_once("Modelos/alumno.php");
 require_once("bootstrap.php");
 require_once("cn.php");
 
+
 if(isset($_SESSION["carnet"])){
   
 $carnet=$_SESSION["carnet"];
 
+
 $sql=" SELECT * FROM alumno WHERE carnet = '".$carnet."' ";
+
 $rs=$cn->query($sql);
 $resultado=$cn->query($sql);
 
 
 
 }
+$carnet;
+$nombre;
+$horas;
+$apellido;
+$carrera;
+$h;
+$año;
+$email;
+
+while ($alumno = $resultado->fetch_assoc()) {             
+    $carnet = $alumno['carnet'];     
+    $nombre =$alumno['nombre']    ;
+    $apellido =$alumno['apellido'];
+    $año = $alumno ['yearingreso'];
+    $carrera = $alumno ['carrera'];
+    $email = $alumno ['email'];
+    $h =$alumno['horas_sociales']    ;
+    $horas = 300- $h;
+
+}
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -163,19 +187,24 @@ while ($fila=$rs->fetch_assoc()) {
             </ul>
         </nav>
 
+        
+        <?php 
+        
+        ?>
+
         <section class="full-reset text-center position-relative" style="padding: 40px 0; ">
 
 
         <article class="tile">
                 <div class="tile-icon full-reset"><i class="zmdi zmdi-timer"></i></div>
-                <div class="tile-name all-tittles">Total de horas</div>
-                <div class="tile-num full-reset">0</div>
+                <div class="tile-name all-tittles">Horas a Realizar</div>
+                <div class="tile-num full-reset">300</div>
         </article>
 
         <article class="tile">
                 <div class="tile-icon full-reset"><i class="zmdi zmdi-time-restore"></i></div>
                 <div class="tile-name all-tittles" style="width: 90%;">Horas Restantes</div>
-                <div class="tile-num full-reset">0</div>
+                <div class="tile-num full-reset"><?php echo $horas;?></div>
             </article>
 </section>
 
@@ -189,9 +218,7 @@ while ($fila=$rs->fetch_assoc()) {
 </head>
 <body>
     <div class="form-container">
-    <?php
-        while ($alumno = $resultado->fetch_assoc()) {
-            echo "
+    
             <div class='card mb-4 shadow-sm'>
                 <div class='card-header bg-dark text-white'>
                     <h5 class='card-title mb-0 larger-text'>Información del Alumno</h5>
@@ -199,33 +226,35 @@ while ($fila=$rs->fetch_assoc()) {
                 <div class='card-body larger-text'>
                     <div class='mb-3'>
                         <label class='form-label fw-bold'>Carnet:</label>
-                        <input class='form-control larger-text' type='text' value='{$alumno['carnet']}' readonly>
-                    </div>
+                        <input class='form-control larger-text' type='text' value='<?php echo $carnet; ?>' readonly>
+                        </div>
                     <div class='mb-3'>
                         <label class='form-label fw-bold'>Nombre:</label>
-                        <input class='form-control larger-text' type='text' value='{$alumno['nombre']}' readonly>
+                        <input class='form-control larger-text' type='text' value='<?php echo $nombre; ?>' readonly>
                     </div>
                     <div class='mb-3'>
                         <label class='form-label fw-bold'>Apellido:</label>
-                        <input class='form-control larger-text' type='text' value='{$alumno['apellido']}' readonly>
+                        <input class='form-control larger-text' type='text' value='<?php echo $apellido; ?>' readonly>
                     </div>
                     <div class='mb-3'>
                         <label class='form-label fw-bold'>Carrera:</label>
-                        <input class='form-control larger-text' type='text' value='{$alumno['carrera']}' readonly>
+                        <input class='form-control larger-text' type='text' value='<?php echo $carrera; ?>' readonly>
                     </div>
                     <div class='mb-3'>
                         <label class='form-label fw-bold'>Año de Ingreso:</label>
-                        <input class='form-control larger-text' type='text' value='{$alumno['yearingreso']}' readonly>
+                        <input class='form-control larger-text' type='text'  value='<?php echo $año; ?>' readonly>
                     </div>
                     <div class='mb-3'>
                         <label class='form-label fw-bold'>Email:</label>
-                        <input class='form-control larger-text' type='text' value='{$alumno['email']}' readonly>
+                        <input class='form-control larger-text' type='text'  value='<?php echo $email; ?>' readonly>
+                    </div>
+                    <div class='mb-3'>
+                        <label class='form-label fw-bold'>Cantidad de Horas Sociales Realizadas:</label>
+                        <input class='form-control larger-text' type='text'  value='<?php echo $h; ?>' readonly>
                     </div>
                 </div>
             </div>
-            ";
-        }
-        ?>
+          
     </div>
 </body>
 </html>

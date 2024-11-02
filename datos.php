@@ -30,25 +30,30 @@ if (isset($_SESSION["carnet"])) {
 $alumnocontroller = new AlumnoController();
 $alumno = new Alumno();
 
-if (isset($_POST['ok1'])) {
 
-    $alumno->setCarnet($_SESSION["carnet"]);
+    if (isset($_POST['ok1'])) {
+        $alumno->setCarnet($_SESSION["carnet"]);
+        $alumno->setNombre($_POST["nombre"]);
+        $alumno->setApellido($_POST["apellido"]);
+        $alumno->setTelefono($_POST["telefono"]);
+        $alumno->setGrupo($_POST["grupo"]);
+        $alumno->setSexo($_POST["sexo"]);
+        $alumno->setEmail($_POST["email"]);
+        $alumno->setYearIngreso($_POST["yearingreso"]);
+        $alumno->setCarrera($_POST["carrera"]);
+        
+        // Asegúrate de que el controlador capture las horas sociales.
+        
+        $alumno->setHorasSociales($_POST["horas_sociales"]);
 
-    $alumno->setNombre($_POST["nombre"]);
-    $alumno->setApellido($_POST["apellido"]);
-    $alumno->setTelefono($_POST["telefono"]);
-    $alumno->setGrupo($_POST["grupo"]);
-    $alumno->setSexo($_POST["sexo"]);
-    $alumno->setEmail($_POST["email"]);
-    $alumno->setYearIngreso($_POST["yearingreso"]);
-    $alumno->setCarrera($_POST["carrera"]);
-
-    $alumnocontroller->actualizar($alumno);
-
-    header('Location: http://localhost/HSBUENA/datos');
-
-    echo "Registro Actualizado con exito";
-}
+    
+    
+        $alumnocontroller->actualizar($alumno);
+    
+        header('Location: http://localhost/HSBUENA/datos');
+        echo "Registro Actualizado con éxito";
+    }
+    
 
 
 ?>
@@ -150,9 +155,15 @@ require_once("bootstrap.php");
                                 <input type="text" class="form-control" name="grupo" value="<?= $alumno['grupo'] ?>"
                                     required>
                             </div>
+                            <div class="form-group">
+                             <label for="horas_sociales">Horas Sociales Realizadas</label>
+                            <input type="number" class="form-control" name="horas_sociales" value="<?= $alumno['horas_sociales'] ?>" required>
+                            </div>
                             <div class="text-center">
                                 <button type="submit" name="ok1" class="btn btn-success">Guardar</button>
                             </div>
+                            
+
                         </form>
                         <?php } ?>
                     </div>

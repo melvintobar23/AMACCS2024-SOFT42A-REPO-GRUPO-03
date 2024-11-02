@@ -18,8 +18,9 @@ class Alumno{
     private $carrera;
     private $fotoal;
     private $carta;
+    private $horas_sociales;
 
-    public function __construct($id="", $carnet="",$clave="", $nombre="", $apellido="", $telefono="", $grupo="", $sexo="", $email="", $yearingreso="", $carrera=""){
+    public function __construct($id="", $carnet="",$clave="", $nombre="", $apellido="", $telefono="", $grupo="", $sexo="", $email="", $yearingreso="", $carrera="",$horas_sociales=""){
         $this->idalumno = $id;
         $this->carnet = $carnet;
         $this->clave=$clave;
@@ -112,6 +113,8 @@ class Alumno{
         return $this->yearingreso;
     }
 
+    
+
     public function SetYearIngreso($yearingreso){
         $this->yearingreso = $yearingreso;
     }
@@ -123,6 +126,16 @@ class Alumno{
     public function SetCarrera($carrera){
         $this->carrera = $carrera;
     }
+    
+    public function setHorasSociales($horas) {
+            $this->horas_sociales = $horas;
+        }
+    
+    public function getHorasSociales() {
+            return $this->horas_sociales;
+                }
+    
+    
 }
 
 ?>
