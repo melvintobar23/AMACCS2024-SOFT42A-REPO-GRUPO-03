@@ -158,7 +158,7 @@ while ($fila=$rs->fetch_assoc()) {
                 <span class='highlight'></span>
                 <span class='bar'></span>
 
-            </div>
+            </div><br>
 
 
             <p class='text-center'>

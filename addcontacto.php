@@ -182,7 +182,7 @@ if (isset($_POST['ok1'])) {
                         ];
                         ?>
                         <div class="group-material">
-                            <label>Título Universitario</label>
+                            <label>Título Universitario</label><br>
                             <select class="material-control tooltips-general" name="titulo" required="">
                                 <?php foreach ($titulosUniversitarios as $titulo) {
                                     echo "<option value='$titulo'>$titulo</option>";
@@ -198,8 +198,8 @@ if (isset($_POST['ok1'])) {
 
                         <!-- Sexo -->
                         <div class="group-material">
-                            <label>Sexo</label>
-                            <select class="material-control tooltips-general" name="sexo" required="">
+                            <label>Sexo</label><br>
+                            <select class="material-control tooltips-general" name="sexo" required="" maxlength="50">
                                 <option value='' disabled selected></option>
                                 <option value='M'>Masculino</option>
                                 <option value='F'>Femenino</option>
@@ -209,7 +209,7 @@ if (isset($_POST['ok1'])) {
 
                         <!-- Cargo -->
                         <div class="group-material">
-                            <label>Cargo</label>
+                            <label>Cargo</label><br>
                             <select class="material-control tooltips-general" name="idcargo" required="">
                                 <option value='Supervisor'>Supervisor</option>
                                 <option value='Gerente'>Gerente</option>
