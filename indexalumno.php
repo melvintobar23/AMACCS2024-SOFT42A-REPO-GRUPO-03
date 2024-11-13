@@ -55,6 +55,7 @@ define("URL","http://localhost/HSBUENA/");
         <!-- place navbar here -->
         <?php 
         require_once("menualumno.php");
+        
         ?>
     </header>
     

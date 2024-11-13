@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -22,18 +20,15 @@
                 </select>
             </div>
 
-            <!-- Carnet -->
             <div class="form-group">
                 <label for="carnet">Carnet</label>
                 <input type="text" class="form-control" id="carnet" name="carnet" placeholder="Introduce tu carnet" required>
             </div>
 
-            <!-- Empresa -->
             <div class="form-group">
                 <label for="idempresa">Empresa</label>
                 <select class="form-control" id="idempresa" name="idempresa" required>
                     <option value="" disabled selected>Seleccione la empresa</option>
-                    <!-- Aquí irán las opciones generadas dinámicamente -->
                 </select>
             </div>
 
